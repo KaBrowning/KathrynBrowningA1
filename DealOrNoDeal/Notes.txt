@@ -1,0 +1,6 @@
+﻿Known bugs:
+	1) When clicking on a case, the roundLabel and casesToOpenLabel both decrement. 
+	2) Round 10
+		- only the player's selected case shows up correctly
+		- When clicking on the final case, it displays the banker's offer instead of what is contained in the case
+	3) Refactoring needs to be done
