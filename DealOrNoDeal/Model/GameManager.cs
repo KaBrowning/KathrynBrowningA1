@@ -113,6 +113,14 @@ namespace DealOrNoDeal.Model
         /// </value>
         public int MaxOfferFromBanker { get; set; } = maxOffer;
 
+        /// <summary>
+        /// Gets or sets the current game version.
+        /// </summary>
+        /// <value>
+        /// The current game version.
+        /// </value>
+        public GameVersion CurrentGameVersion { get; set; } = GameVersion.Regular;
+
         #endregion
 
         #region Methods
