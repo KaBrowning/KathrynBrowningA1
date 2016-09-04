@@ -4,11 +4,33 @@ using System.Linq;
 
 namespace DealOrNoDeal.Model
 {
+
     /// <summary>
     ///     Handles the management of the actual gameplay.
     /// </summary>
     public class GameManager
     {
+        /// <summary>
+        ///     Deal or No Deal consists of 3 different game versions: Syndicated, Regular, or Mega, each 
+        ///     with varying monetary amounts.
+        /// </summary>
+        public enum GameVersion
+        {
+            /// <summary>
+            ///     The version of the game in which monetary values are significantly lower.
+            /// </summary>
+            Syndicated,
+
+            /// <summary>
+            ///     The normal version of the game.
+            /// </summary>
+            Regular,
+
+            /// <summary>
+            ///     The version of the game in which monetary values are significantly higher.
+            /// </summary>
+            Mega
+        }
 
         private readonly List<int> dollarValuesForGame;
         private readonly List<int> briefCaseDollarValues;

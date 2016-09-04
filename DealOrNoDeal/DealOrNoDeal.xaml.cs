@@ -220,15 +220,6 @@ namespace DealOrNoDeal
             }
         }
 
-        private void hideDealAndNoDealButtons()
-        {
-            this.dealButton.IsEnabled = false;
-            this.dealButton.Visibility = Visibility.Collapsed;
-
-            this.noDealButton.IsEnabled = false;
-            this.noDealButton.Visibility = Visibility.Collapsed;
-        }
-
         private void hideBriefCaseButtons()
         {
             foreach (var button in this.briefCaseButtons)
@@ -236,6 +227,15 @@ namespace DealOrNoDeal
                 button.IsEnabled = false;
                 button.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void hideDealAndNoDealButtons()
+        {
+            this.dealButton.IsEnabled = false;
+            this.dealButton.Visibility = Visibility.Collapsed;
+
+            this.noDealButton.IsEnabled = false;
+            this.noDealButton.Visibility = Visibility.Collapsed;
         }
 
         private void showDealAndNoDealButtons()
