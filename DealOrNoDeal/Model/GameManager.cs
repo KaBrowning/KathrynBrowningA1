@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.UI.Popups;
 
 namespace DealOrNoDeal.Model
 {
@@ -45,6 +46,9 @@ namespace DealOrNoDeal.Model
         private readonly List<int> dollarValuesInPlay;
         private readonly List<int> allBankOffers;
         private readonly Banker banker;
+        private Dictionary<int, int> casesForNineRoundGame;
+        private Dictionary<int, int> casesForTenRoundGame;
+        private Dictionary<int, int> casesForFourteenRoundGame;
 
         #endregion
 
@@ -106,14 +110,6 @@ namespace DealOrNoDeal.Model
         /// </value>
         public int MaxOfferFromBanker { get; set; } = maxOffer;
 
-        /// <summary>
-        ///     Gets or sets the current game version.
-        /// </summary>
-        /// <value>
-        ///     The current game version.
-        /// </value>
-        public GameVersion CurrentGameVersion { get; set; } = GameVersion.Regular;
-
         #endregion
 
         #region Constructors
@@ -151,8 +147,49 @@ namespace DealOrNoDeal.Model
                 750000,
                 1000000
             };
+            this.casesForNineRoundGame = new Dictionary<int, int>() {
+                {1, 8 },
+                {2, 6 },
+                {3, 4 },
+                {4, 2 },
+                {5, 1 },
+                {6, 1 },
+                {7, 1 },
+                {8, 1 },
+                {9, 1 }
+
+            };
+            this.casesForTenRoundGame = new Dictionary<int, int>() {
+                {1, 6 },
+                {2, 5 },
+                {3, 4 },
+                {4, 3 },
+                {5, 2 },
+                {6, 1 },
+                {7, 1 },
+                {8, 1 },
+                {9, 1 },
+                {10, 1 }
+            };
+            this.casesForFourteenRoundGame = new Dictionary<int, int>() {
+                {1, 5 },
+                {2, 4 },
+                {3, 3 },
+                {4, 2 },
+                {5, 1 },
+                {6, 1 },
+                {7, 1 },
+                {8, 1 },
+                {9, 1 },
+                {10, 1 },
+                {11, 1 },
+                {12, 1 },
+                {13, 1 },
+                {14, 1 }
+            };
+
             this.briefCaseDollarValues = new List<int>();
-            this.changeGameVersion(GameVersion.Regular);
+            this.changeGameType(GameVersion.Regular, 9);
             this.dollarValuesInPlay = new List<int>(this.dollarValuesForGame);
             this.banker = new Banker();
             this.allBankOffers = new List<int>();
@@ -206,7 +243,7 @@ namespace DealOrNoDeal.Model
         public void MoveToNextRound()
         {
             this.CurrentRound = this.CurrentRound + 1;
-            this.numOfCasesToOpenCurrentRound();
+            //this.NumOfCasesToOpenPerRound();
         }
 
         /// <summary>
@@ -221,9 +258,10 @@ namespace DealOrNoDeal.Model
             return this.briefCaseDollarValues[briefCaseNumber];
         }
 
-        private void changeGameVersion(GameVersion gameVersion)
+        private void changeGameType(GameVersion gameVersion, int numofRounds)
         {
             this.changeDollarValuesForGame(gameVersion);
+            this.NumOfCasesToOpenPerRound(numofRounds);
         }
 
         private void changeDollarValuesForGame(GameVersion gameVersion)
@@ -363,33 +401,69 @@ namespace DealOrNoDeal.Model
             }
         }
 
-        private void numOfCasesToOpenCurrentRound()
+        /// <summary>
+        /// Numbers the of cases to open per round.
+        /// </summary>
+        /// <returns></returns>
+        public void NumOfCasesToOpenPerRound(int numOfRounds)
         {
-            switch (this.CurrentRound)
+            if (numOfRounds != 9 || numOfRounds != 10 || numOfRounds != 14)
             {
-                case 1:
-                    this.CasesRemainingForRound = 6;
-                    return;
+                throw new ArgumentOutOfRangeException(); //unhandled in user code
+            }
 
-                case 2:
-                    this.CasesRemainingForRound = 5;
-                    return;
+            try
+            {
+                if (isTenRounds(numOfRounds))
+                {
+                    this.decrementTenRounds();
+                }
+                else if (isFourteenRounds(numOfRounds))
+                {
+                    this.decrementFourteenRounds();
+                }
+                else
+                {
+                    this.decrementNineRounds();
+                }
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                var whatHappened = new MessageDialog("error has occured" + e);
+            }     
+        }
 
-                case 3:
-                    this.CasesRemainingForRound = 4;
-                    return;
+        private static bool isTenRounds(int numOfRounds)
+        {
+            return numOfRounds == 10;
+        }
 
-                case 4:
-                    this.CasesRemainingForRound = 3;
-                    return;
+        private static bool isFourteenRounds(int numOfRounds)
+        {
+            return numOfRounds == 14;
+        }
 
-                case 5:
-                    this.CasesRemainingForRound = 2;
-                    return;
+        private void decrementNineRounds()
+        {
+            foreach (var round in this.casesForNineRoundGame)
+            {
+                this.CasesRemainingForRound = this.casesForNineRoundGame[round.Value]--;
+            }
+        }
 
-                default:
-                    this.CasesRemainingForRound = 1;
-                    return;
+        private void decrementTenRounds()
+        {
+            foreach (var round in this.casesForTenRoundGame)
+            {
+                this.CasesRemainingForRound = this.casesForTenRoundGame[round.Value]--;
+            }
+        }
+
+        private void decrementFourteenRounds()
+        {
+            foreach (var round in this.casesForFourteenRoundGame)
+            {
+                this.CasesRemainingForRound = this.casesForFourteenRoundGame[round.Value]--; //may not decrement the per round cases, may decrement the entire number of cases to be opened.
             }
         }
 

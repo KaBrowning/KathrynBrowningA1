@@ -129,20 +129,24 @@ namespace DealOrNoDeal
 
         private void briefcase_Click(object sender, RoutedEventArgs e)
         {
-            var button = (Button)sender;
+            var button = sender as Button;
 
-            button.IsEnabled = true;
-            button.Visibility = Visibility.Collapsed;
+            if (button != null)
+            {
+                button.IsEnabled = true;
+                button.Visibility = Visibility.Collapsed;
 
-            var briefCaseClickedIndex = this.getBriefcaseIndex(button);
+                var briefCaseClicked = this.getBriefcaseIndex(button);
 
-            this.setPlayerBriefCase(briefCaseClickedIndex);
+                this.setPlayerBriefCase(briefCaseClicked);
 
-            var dollarAmountLabelIndex =
-                this.gameManager.RemoveDollarAmountFromPlay(this.gameManager.GetBriefCaseValue(briefCaseClickedIndex));
-            this.greyOutLabel(dollarAmountLabelIndex);
+                var selectedDollarAmount =
+                    this.gameManager.RemoveDollarAmountFromPlay(this.gameManager.GetBriefCaseValue(briefCaseClicked));
 
-            this.briefCaseButtons.Remove(button);
+                this.greyOutLabel(selectedDollarAmount);
+
+                this.briefCaseButtons.Remove(button);
+            }
             this.updateCurrentRoundInformation();
         }
 
@@ -166,11 +170,17 @@ namespace DealOrNoDeal
         private void updateCurrentRoundInformation()
         {
             this.roundLabel.Text = "Round " + this.gameManager.CurrentRound + ": " + this.gameManager.CasesRemainingForRound + " cases to open";
-            var casesLeft = this.gameManager.CasesRemainingForRound--;
-            this.casesToOpenLabel.Text = casesLeft + " more cases to open";
+            this.updateLabelsAsCasesAreSelected();
+        }
+
+        private void updateLabelsAsCasesAreSelected()
+        {
+           // var casesRemaining = this.gameManager.CasesRemainingForRound;
+           // this.gameManager.CasesRemainingForRound--;
+            this.casesToOpenLabel.Text = this.gameManager.CasesRemainingForRound + " more cases to open";
             this.summaryOutput.Text = "Your case: " + this.gameManager.CaseSelectedByPlayer;
 
-            if (casesLeft == 0)
+            if (this.gameManager.CasesRemainingForRound == 0)
             {
                 this.summaryOutput.Text = "Offers: Min: " + this.gameManager.MinOfferFromBanker + "; Max: " + this.gameManager.MaxOfferFromBanker
                    + "\nCurrent offer: $" + this.gameManager.GetOffer() + "\nDeal or No Deal?";
