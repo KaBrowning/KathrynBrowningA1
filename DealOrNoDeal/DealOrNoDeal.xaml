@@ -118,7 +118,7 @@
                         <TextBlock Style="{StaticResource MoneyTextBlockStyle}" Text="$10,000"/>
                     </Border>
                     <Border x:Name="label16Border" Style="{StaticResource BorderStyle}">
-                        <TextBlock Style="{StaticResource MoneyTextBlockStyle}" Text="$25000"/>
+                        <TextBlock Style="{StaticResource MoneyTextBlockStyle}" Text="$25,000"/>
                     </Border>
                     <Border x:Name="label17Border" Style="{StaticResource BorderStyle}">
                         <TextBlock Style="{StaticResource MoneyTextBlockStyle}" Text="$50,000"/>

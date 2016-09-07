@@ -140,14 +140,17 @@ namespace DealOrNoDeal
 
                 this.setPlayerBriefCase(briefCaseClicked);
 
+
+
                 var selectedDollarAmount =
                     this.gameManager.RemoveDollarAmountFromPlay(this.gameManager.GetBriefCaseValue(briefCaseClicked));
 
                 this.greyOutLabel(selectedDollarAmount);
 
                 this.briefCaseButtons.Remove(button);
+
+                this.updateCurrentRoundInformation();
             }
-            this.updateCurrentRoundInformation();
         }
 
         private void greyOutLabel(int index)
@@ -169,18 +172,21 @@ namespace DealOrNoDeal
 
         private void updateCurrentRoundInformation()
         {
-            this.roundLabel.Text = "Round " + this.gameManager.CurrentRound + ": " + this.gameManager.CasesRemainingForRound + " cases to open";
+            this.roundLabel.Text = "Round " + this.gameManager.CurrentRound + ": " + this.gameManager.casesForCurrentGame[this.gameManager.CurrentRound] + " cases to open";
             this.updateLabelsAsCasesAreSelected();
         }
 
         private void updateLabelsAsCasesAreSelected()
-        {
-           // var casesRemaining = this.gameManager.CasesRemainingForRound;
-           // this.gameManager.CasesRemainingForRound--;
-            this.casesToOpenLabel.Text = this.gameManager.CasesRemainingForRound + " more cases to open";
+        { 
+            this.casesToOpenLabel.Text = this.gameManager.CasesRemainingForRound-- + " more cases to open";
             this.summaryOutput.Text = "Your case: " + this.gameManager.CaseSelectedByPlayer;
 
-            if (this.gameManager.CasesRemainingForRound == 0)
+            this.lastCasesPerRound();
+        }
+
+        private void lastCasesPerRound()
+        {
+            if (this.gameManager.CasesRemainingForRound == -1)
             {
                 this.summaryOutput.Text = "Offers: Min: " + this.gameManager.MinOfferFromBanker + "; Max: " + this.gameManager.MaxOfferFromBanker
                    + "\nCurrent offer: $" + this.gameManager.GetOffer() + "\nDeal or No Deal?";
